@@ -9,6 +9,9 @@ public interface Agent{
    * Reports the agents name
    * */
   public String toString();
+  
+  //something for Trainer
+  public String getFeatures();
 
   /**
    * Given the state, return the action that the strategy chooses for this state.

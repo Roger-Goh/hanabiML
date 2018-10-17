@@ -1,5 +1,18 @@
 package agents;
-import hanabAI.*;
+import java.io.BufferedWriter;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.PrintWriter;
+import java.util.ArrayList;
+import java.util.List;
+
+import hanabAI.Action;
+import hanabAI.ActionType;
+import hanabAI.Agent;
+import hanabAI.Card;
+import hanabAI.Colour;
+import hanabAI.IllegalActionException;
+import hanabAI.State;
 
 
 /**
@@ -13,18 +26,25 @@ import hanabAI.*;
  *   otherwise discard a random card.
  *@author Tim French 
  **/
-public class BasicAgent implements Agent{
+public class TrainerAgent implements Agent{
 
   private Colour[] colours;
   private int[] values;
   private boolean firstAction = true;
   private int numPlayers;
   private int index;
+  
+  //trainer assets
+  public List<Integer> features = new ArrayList<Integer>();
+  public List<Integer> labels = new ArrayList<Integer>();
+  
+  public List<String> masterList = new ArrayList<String>();
+  public String masterListToString;
 
   /**
    * Default constructor, does nothing.
    * **/
-  public BasicAgent(){}
+  public TrainerAgent(){}
 
   /**
    * Initialises variables on the first call to do action.
@@ -41,6 +61,16 @@ public class BasicAgent implements Agent{
       values = new int[5];
     }
     index = s.getNextPlayer();
+    
+//    //example
+//    System.out.println(index);
+//    features.add(index);
+//    features.add(2);
+//    System.out.println(features.toString());
+//    masterList.add(features.toString());
+//    masterList.add("[3]");
+//    System.out.println(masterList.toString());
+    
     firstAction = false;
   }
 
@@ -48,8 +78,9 @@ public class BasicAgent implements Agent{
    * Returns the name BaseLine.
    * @return the String "BaseLine"
    * */
-  public String toString(){return "BaseLine";}
-  public String getFeatures(){return "BasicAgent does not collect features";}
+  public String toString(){return "Trainer";}
+
+  public String getFeatures(){return masterListToString;}
 
   /**
    * Performs an action given a state.
@@ -74,12 +105,22 @@ public class BasicAgent implements Agent{
     //get any hints
     try{
       getHints(s);
+      
+      features.clear();
+      features.add(s.getScore()); //adding feature to single object
+      
       Action a = playKnown(s);
       if(a==null) a = discardKnown(s);
       if(a==null) a = hint(s);
       if(a==null) a = playGuess(s);
       if(a==null) a = discardGuess(s);
       if(a==null) a = hintRandom(s);
+      
+
+      masterList.add("{"+features.toString().substring(1,features.toString().length()-1)+"}"); //formats object with features into array declaration format
+      masterListToString = masterList.toString(); //whole list of objects/fruits
+      masterListToString=masterListToString.substring(1, masterListToString.length()-1); //removes [] brackets again
+      masterListToString+=','; //adds a comma so our features list is ongoing, appendable
       return a;
     }
     catch(IllegalActionException e){
@@ -87,7 +128,7 @@ public class BasicAgent implements Agent{
       throw new RuntimeException("Something has gone very wrong");
     }
   }
-
+  
   //updates colours and values from hints received
   public void getHints(State s){
     try{

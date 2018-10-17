@@ -1,5 +1,6 @@
 package hanabAI;
 
+import java.util.*;
 
 /**
  * A class for running a single game of Hanabi.
@@ -80,13 +81,27 @@ public class Hanabi{
    * The agent implementations should be in the default package.
    * */
   public static void main(String[] args){
-    Agent[] agents = {new agents.BasicAgent(),new agents.BasicAgent(), new agents.BasicAgent()};
-    Hanabi game= new Hanabi(agents);
-    StringBuffer log = new StringBuffer("A simple game for three basic agents:\n");
-    int result = game.play(log);
-    log.append("The final score is "+result+".\n");
-    log.append(critique(result));
-    System.out.print(log);
+//    Agent[] agents = {new agents.BasicAgent(),new agents.BasicAgent(), new agents.BasicAgent()};
+    Agent[] agents = {new agents.BasicAgent(),new agents.TrainerAgent(), new agents.BasicAgent()};
+//	  Agent[] agents = {new agents.BasicAgent(),new agents.BasicAgent()};
+    
+//    Hanabi game= new Hanabi(agents);
+//    StringBuffer log = new StringBuffer("A simple game for three basic agents:\n");
+//    int result = game.play();
+////    int result = game.play(log);
+//    log.append("The final score is "+result+".\n");
+//    log.append(critique(result));
+//    System.out.println(log);
+//    System.out.println(agents[1].getFeatures());
+    
+    
+//      ArrayList<Integer> values = new ArrayList<Integer>();
+      for(int i=0; i<1; i++) {
+    	  Hanabi game= new Hanabi(agents);
+    	  int result = game.play();
+    	  System.out.println(agents[1].getFeatures());
+      }
+    
   }
 }
 
