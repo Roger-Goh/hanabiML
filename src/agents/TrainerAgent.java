@@ -1,10 +1,7 @@
 package agents;
-import java.io.BufferedWriter;
-import java.io.FileWriter;
-import java.io.IOException;
-import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Stack;
 
 import hanabAI.Action;
 import hanabAI.ActionType;
@@ -102,12 +99,83 @@ public class TrainerAgent implements Agent{
     } 
     //Assume players index is sgetNextPlayer()
     index = s.getNextPlayer();
+    
     //get any hints
     try{
       getHints(s);
       
-      features.clear();
-      features.add(s.getScore()); //adding feature to single object
+      //add features of the game state
+      features.clear();	//new object/fruit
+      features.add(s.getOrder()); //adding feature to single object/fruit
+      features.add(s.getScore()); 
+      features.add(s.getFuseTokens());
+      features.add(s.getHintTokens());
+      //gets fireworks currently played
+      String[] fireworksColours = {"BLUE","GREEN","RED","WHITE","YELLOW"};
+      for(String fireworksColour:fireworksColours) {
+	      Stack<Card> fireworks = s.getFirework(Colour.valueOf(fireworksColour)); //stack of blue fireworks
+	      if(fireworks.isEmpty()) {
+	    	  features.add(0);
+	      }else {
+	    	  features.add(s.getFirework(Colour.valueOf(fireworksColour)).peek().getValue()); //the value on top of the stack, 0 for no cards
+	      }
+      }
+      //get hints of my hand, 0 if unknown
+      //colour hints
+      for(Colour colour:colours) {
+    	 if(colour==null) {features.add(0);}else{ //we don't know the colour of this card
+	    	 switch (colour.toString()){
+	    	 	case "Blue": features.add(1);
+				   			break; 
+	    	 	case "Green": features.add(2);
+	   						break; 
+	    	 	case "Red": features.add(3);
+	   						break; 
+	    	 	case "White": features.add(4);
+	   						break; 
+	    	 	case "Yellow": features.add(5);
+	   						break; 
+	    	 	default: System.out.println("invalid");
+	   						break; 
+	    	 }
+    	 }
+     }
+      //value hints
+      for(int value:values) {
+    	  features.add(value);
+      }
+      
+      //teammates' hands
+      for(int i=0;i<s.getPlayers().length;i++) {
+    	  if(i!=index) {
+    		  Card[] playerHand = s.getHand(i);
+    		  //colours
+    		  for(Card card:playerHand) {
+    			  if(card==null) {features.add(0);}else{ //we don't know the colour of this card
+    			    	 switch (card.getColour().toString()){
+    			    	 	case "Blue": features.add(1);
+    						   			break; 
+    			    	 	case "Green": features.add(2);
+    			   						break; 
+    			    	 	case "Red": features.add(3);
+    			   						break; 
+    			    	 	case "White": features.add(4);
+    			   						break; 
+    			    	 	case "Yellow": features.add(5);
+    			   						break; 
+    			    	 	default: System.out.println("invalid");
+    			   						break; 
+    			    	 }
+    		    	 }
+    		  }
+    		  //values
+    		  for(Card card:playerHand) {
+    			  if(card==null) {features.add(0);}else {
+    				  features.add(card.getValue());
+    			  }
+    		  }
+    	  }
+      }
       
       Action a = playKnown(s);
       if(a==null) a = discardKnown(s);

@@ -82,7 +82,7 @@ public class Hanabi{
    * */
   public static void main(String[] args){
 //    Agent[] agents = {new agents.BasicAgent(),new agents.BasicAgent(), new agents.BasicAgent()};
-    Agent[] agents = {new agents.BasicAgent(),new agents.TrainerAgent(), new agents.BasicAgent()};
+//    Agent[] agents = {new agents.BasicAgent(),new agents.TrainerAgent(), new agents.BasicAgent()};
 //	  Agent[] agents = {new agents.BasicAgent(),new agents.BasicAgent()};
     
 //    Hanabi game= new Hanabi(agents);
@@ -96,10 +96,14 @@ public class Hanabi{
     
     
 //      ArrayList<Integer> values = new ArrayList<Integer>();
-      for(int i=0; i<1; i++) {
+      for(int i=0; i<5000; i++) {
+    	  Agent[] agents = {new agents.BasicAgent(),new agents.TrainerAgent(), new agents.BasicAgent()};
     	  Hanabi game= new Hanabi(agents);
     	  int result = game.play();
-    	  System.out.println(agents[1].getFeatures());
+    	  if(result>15) { //only gets training data that is better than 15
+//	    	  System.out.println("Score: "+result);
+	    	  System.out.println(agents[1].getFeatures());
+    	  }
       }
     
   }
