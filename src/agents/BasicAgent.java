@@ -50,6 +50,7 @@ public class BasicAgent implements Agent{
    * */
   public String toString(){return "BaseLine";}
   public String getFeatures(){return "BasicAgent does not collect features";}
+  public String getLabels() {return "BasicAgent does not collect labels";}
 
   /**
    * Performs an action given a state.

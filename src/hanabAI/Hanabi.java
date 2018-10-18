@@ -96,16 +96,21 @@ public class Hanabi{
     
     
 //      ArrayList<Integer> values = new ArrayList<Integer>();
-      for(int i=0; i<5000; i++) {
+	  String features = "";
+	  String labels = "";
+      for(int i=0; i<3; i++) {
     	  Agent[] agents = {new agents.BasicAgent(),new agents.TrainerAgent(), new agents.BasicAgent()};
     	  Hanabi game= new Hanabi(agents);
     	  int result = game.play();
-    	  if(result>15) { //only gets training data that is better than 15
+    	  if(result>-1) { //only gets training data that is better than 15
 //	    	  System.out.println("Score: "+result);
-	    	  System.out.println(agents[1].getFeatures());
+//	    	  System.out.println(agents[1].getFeatures());
+	    	  features+=agents[1].getFeatures();
+	    	  labels+=agents[1].getLabels().substring(1,agents[1].getLabels().length()-1)+", ";
     	  }
       }
-    
+	  System.out.println(features.substring(0, features.length()-1));
+	  System.out.print(labels.substring(0, labels.length()-2));
   }
 }
 

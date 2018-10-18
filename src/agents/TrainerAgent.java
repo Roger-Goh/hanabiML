@@ -1,5 +1,6 @@
 package agents;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Stack;
 
@@ -37,6 +38,7 @@ public class TrainerAgent implements Agent{
   
   public List<String> masterList = new ArrayList<String>();
   public String masterListToString;
+  public String labelsToString;
 
   /**
    * Default constructor, does nothing.
@@ -78,6 +80,7 @@ public class TrainerAgent implements Agent{
   public String toString(){return "Trainer";}
 
   public String getFeatures(){return masterListToString;}
+  public String getLabels(){return labelsToString;}
 
   /**
    * Performs an action given a state.
@@ -183,7 +186,6 @@ public class TrainerAgent implements Agent{
       if(a==null) a = playGuess(s);
       if(a==null) a = discardGuess(s);
       if(a==null) a = hintRandom(s);
-      
 
       masterList.add("{"+features.toString().substring(1,features.toString().length()-1)+"}"); //formats object with features into array declaration format
       masterListToString = masterList.toString(); //whole list of objects/fruits
@@ -233,6 +235,22 @@ public class TrainerAgent implements Agent{
       if(colours[i]!=null && values[i]==playable(s,colours[i])){
         colours[i] = null;
         values[i] = 0;
+        
+        //training label
+        switch(i) {
+        	case 0: labels.add(6);
+        	break;
+        	case 1: labels.add(7);
+        	break;
+        	case 2: labels.add(8);
+        	break;
+        	case 3: labels.add(9);
+        	break;
+        	case 4: labels.add(10);
+        	break;
+        }
+        labelsToString=labels.toString();
+        
         return new Action(index, toString(), ActionType.PLAY,i);
       }
     }
@@ -246,6 +264,22 @@ public class TrainerAgent implements Agent{
         if(colours[i]!=null && values[i]>0 && values[i]<playable(s,colours[i])){
           colours[i] = null;
           values[i] = 0;
+          
+        //training label
+          switch(i) {
+	      	case 0: labels.add(1);
+	      	break;
+	      	case 1: labels.add(2);
+	      	break;
+	      	case 2: labels.add(3);
+	      	break;
+	      	case 3: labels.add(4);
+	      	break;
+	      	case 4: labels.add(5);
+	      	break;
+	      }
+          labelsToString=labels.toString();
+          
           return new Action(index, toString(), ActionType.DISCARD,i);
         }
       }
@@ -263,13 +297,118 @@ public class TrainerAgent implements Agent{
         Card[] hand = s.getHand(hintee);
         for(int j = 0; j<hand.length; j++){
           Card c = hand[j];
-          if(c!=null && c.getValue()==playable(s,c.getColour())){
+          if(c!=null && c.getValue()==playable(s,c.getColour())){//goes through teammates hand to see if any cards are playable
             //flip coin
             if(Math.random()>0.5){//give colour hint
-              boolean[] col = new boolean[hand.length];
+              boolean[] col = new boolean[hand.length]; 
               for(int k = 0; k< col.length; k++){
                 col[k]=c.getColour().equals((hand[k]==null?null:hand[k].getColour()));
               }
+              
+              //training label
+                switch(c.getColour().toString()) {
+	    	 	case "Blue": switch(hintee) {
+					    	 	case 0: 
+					    	 		labels.add(11);
+					    	 		break;
+					    	 	case 1:
+					    	 		labels.add(12);
+					    	 		break;
+					    	 	case 2:
+					    	 		labels.add(13);
+					    	 		break;
+					    	 	case 3:
+					    	 		labels.add(14);
+					    	 		break;
+					    	 	case 4:
+					    	 		labels.add(15);
+					    	 		break;
+	    	 				}
+	   						 break; 
+			 	case "Green": switch(hintee) {
+					    	 	case 0: 
+					    	 		labels.add(16);
+					    	 		break;
+					    	 	case 1:
+					    	 		labels.add(17);
+					    	 		break;
+					    	 	case 2:
+					    	 		labels.add(18);
+					    	 		break;
+					    	 	case 3:
+					    	 		labels.add(19);
+					    	 		break;
+					    	 	case 4:
+					    	 		labels.add(20);
+					    	 		break;
+								}
+							 break; 
+			 	case "Red":  switch(hintee) {
+					    	 	case 0: 
+					    	 		labels.add(21);
+					    	 		break;
+					    	 	case 1:
+					    	 		labels.add(22);
+					    	 		break;
+					    	 	case 2:
+					    	 		labels.add(23);
+					    	 		break;
+					    	 	case 3:
+					    	 		labels.add(24);
+					    	 		break;
+					    	 	case 4:
+					    	 		labels.add(25);
+					    	 		break;
+								}
+							 break; 
+			 	case "White":  switch(hintee) {
+					    	 	case 0: 
+					    	 		labels.add(26);
+					    	 		break;
+					    	 	case 1:
+					    	 		labels.add(27);
+					    	 		break;
+					    	 	case 2:
+					    	 		labels.add(28);
+					    	 		break;
+					    	 	case 3:
+					    	 		labels.add(29);
+					    	 		break;
+					    	 	case 4:
+					    	 		labels.add(30);
+					    	 		break;
+								}
+							 break; 
+			 	case "Yellow":  switch(hintee) {
+						    	 	case 0: 
+						    	 		labels.add(31);
+						    	 		break;
+						    	 	case 1:
+						    	 		labels.add(32);
+						    	 		break;
+						    	 	case 2:
+						    	 		labels.add(33);
+						    	 		break;
+						    	 	case 3:
+						    	 		labels.add(34);
+						    	 		break;
+						    	 	case 4:
+						    	 		labels.add(35);
+						    	 		break;
+									}
+							 break; 
+			 	default: System.out.println("invalid");
+							 break; 
+			 }
+                labelsToString=labels.toString(); 
+                //col/val are the cards affected in the teammates hand in the form of a bool array
+//              for(boolean card:col) {
+//                  System.out.println(card);
+//              }
+//                boolean[] col = new boolean[hand.length]; 
+//                for(int k = 0; k< col.length; k++){
+//                  col[k]=ENUMColour.equals((hand[k]==null?null:hand[k].getColour()));
+//                }
               return new Action(index,toString(),ActionType.HINT_COLOUR,hintee,col,c.getColour());
             }
             else{//give value hint
@@ -277,6 +416,104 @@ public class TrainerAgent implements Agent{
               for(int k = 0; k< val.length; k++){
                 val[k]=c.getValue() == (hand[k]==null?-1:hand[k].getValue());
               }
+              
+              //training label
+              switch(c.getValue()) {
+	    	 	case 1: switch(hintee) {
+					    	 	case 0: 
+					    	 		labels.add(36);
+					    	 		break;
+					    	 	case 1:
+					    	 		labels.add(37);
+					    	 		break;
+					    	 	case 2:
+					    	 		labels.add(38);
+					    	 		break;
+					    	 	case 3:
+					    	 		labels.add(39);
+					    	 		break;
+					    	 	case 4:
+					    	 		labels.add(40);
+					    	 		break;
+	    	 				}
+	   						 break; 
+			 	case 2: switch(hintee) {
+					    	 	case 0: 
+					    	 		labels.add(41);
+					    	 		break;
+					    	 	case 1:
+					    	 		labels.add(42);
+					    	 		break;
+					    	 	case 2:
+					    	 		labels.add(43);
+					    	 		break;
+					    	 	case 3:
+					    	 		labels.add(44);
+					    	 		break;
+					    	 	case 4:
+					    	 		labels.add(45);
+					    	 		break;
+								}
+							 break; 
+			 	case 3:  switch(hintee) {
+					    	 	case 0: 
+					    	 		labels.add(46);
+					    	 		break;
+					    	 	case 1:
+					    	 		labels.add(47);
+					    	 		break;
+					    	 	case 2:
+					    	 		labels.add(48);
+					    	 		break;
+					    	 	case 3:
+					    	 		labels.add(49);
+					    	 		break;
+					    	 	case 4:
+					    	 		labels.add(50);
+					    	 		break;
+								}
+							 break; 
+			 	case 4:  switch(hintee) {
+					    	 	case 0: 
+					    	 		labels.add(51);
+					    	 		break;
+					    	 	case 1:
+					    	 		labels.add(52);
+					    	 		break;
+					    	 	case 2:
+					    	 		labels.add(53);
+					    	 		break;
+					    	 	case 3:
+					    	 		labels.add(54);
+					    	 		break;
+					    	 	case 4:
+					    	 		labels.add(55);
+					    	 		break;
+								}
+							 break; 
+			 	case 5:  switch(hintee) {
+						    	 	case 0: 
+						    	 		labels.add(56);
+						    	 		break;
+						    	 	case 1:
+						    	 		labels.add(57);
+						    	 		break;
+						    	 	case 2:
+						    	 		labels.add(58);
+						    	 		break;
+						    	 	case 3:
+						    	 		labels.add(59);
+						    	 		break;
+						    	 	case 4:
+						    	 		labels.add(50);
+						    	 		break;
+									}
+							 break; 
+			 	default: System.out.println("invalid");
+							 break; 
+			 }
+                labelsToString=labels.toString();
+                
               return new Action(index,toString(),ActionType.HINT_VALUE,hintee,val,c.getValue());
             }
           }
@@ -294,6 +531,22 @@ public class TrainerAgent implements Agent{
         int cardIndex = rand.nextInt(colours.length);
         colours[cardIndex] = null;
         values[cardIndex] = 0;
+        
+      //training label
+        switch(cardIndex) {
+    	case 0: labels.add(6);
+    	break;
+    	case 1: labels.add(7);
+    	break;
+    	case 2: labels.add(8);
+    	break;
+    	case 3: labels.add(9);
+    	break;
+    	case 4: labels.add(10);
+    	break;
+    }
+        labelsToString=labels.toString();
+        
         return new Action(index, toString(), ActionType.PLAY, cardIndex);
       }
     }
@@ -307,6 +560,22 @@ public class TrainerAgent implements Agent{
       int cardIndex = rand.nextInt(colours.length);
       colours[cardIndex] = null;
       values[cardIndex] = 0;
+      
+    //training label
+      switch(cardIndex) {
+    	case 0: labels.add(1);
+    	break;
+    	case 1: labels.add(2);
+    	break;
+    	case 2: labels.add(3);
+    	break;
+    	case 3: labels.add(4);
+    	break;
+    	case 4: labels.add(5);
+    	break;
+    }
+      labelsToString=labels.toString();
+      
       return new Action(index, toString(), ActionType.DISCARD, cardIndex);
     }
     return null;
@@ -330,6 +599,104 @@ public class TrainerAgent implements Agent{
           for(int k = 0; k< col.length; k++){
             col[k]=c.getColour().equals((hand[k]==null?null:hand[k].getColour()));
           }
+          
+        //training label
+          switch(c.getColour().toString()) {
+  	 	case "Blue": switch(hintee) {
+				    	 	case 0: 
+				    	 		labels.add(11);
+				    	 		break;
+				    	 	case 1:
+				    	 		labels.add(12);
+				    	 		break;
+				    	 	case 2:
+				    	 		labels.add(13);
+				    	 		break;
+				    	 	case 3:
+				    	 		labels.add(14);
+				    	 		break;
+				    	 	case 4:
+				    	 		labels.add(15);
+				    	 		break;
+  	 				}
+ 						 break; 
+		 	case "Green": switch(hintee) {
+				    	 	case 0: 
+				    	 		labels.add(16);
+				    	 		break;
+				    	 	case 1:
+				    	 		labels.add(17);
+				    	 		break;
+				    	 	case 2:
+				    	 		labels.add(18);
+				    	 		break;
+				    	 	case 3:
+				    	 		labels.add(19);
+				    	 		break;
+				    	 	case 4:
+				    	 		labels.add(20);
+				    	 		break;
+							}
+						 break; 
+		 	case "Red":  switch(hintee) {
+				    	 	case 0: 
+				    	 		labels.add(21);
+				    	 		break;
+				    	 	case 1:
+				    	 		labels.add(22);
+				    	 		break;
+				    	 	case 2:
+				    	 		labels.add(23);
+				    	 		break;
+				    	 	case 3:
+				    	 		labels.add(24);
+				    	 		break;
+				    	 	case 4:
+				    	 		labels.add(25);
+				    	 		break;
+							}
+						 break; 
+		 	case "White":  switch(hintee) {
+				    	 	case 0: 
+				    	 		labels.add(26);
+				    	 		break;
+				    	 	case 1:
+				    	 		labels.add(27);
+				    	 		break;
+				    	 	case 2:
+				    	 		labels.add(28);
+				    	 		break;
+				    	 	case 3:
+				    	 		labels.add(29);
+				    	 		break;
+				    	 	case 4:
+				    	 		labels.add(30);
+				    	 		break;
+							}
+						 break; 
+		 	case "Yellow":  switch(hintee) {
+					    	 	case 0: 
+					    	 		labels.add(31);
+					    	 		break;
+					    	 	case 1:
+					    	 		labels.add(32);
+					    	 		break;
+					    	 	case 2:
+					    	 		labels.add(33);
+					    	 		break;
+					    	 	case 3:
+					    	 		labels.add(34);
+					    	 		break;
+					    	 	case 4:
+					    	 		labels.add(35);
+					    	 		break;
+								}
+						 break; 
+		 	default: System.out.println("invalid");
+						 break; 
+		 }
+          labelsToString=labels.toString();
+          
           return new Action(index,toString(),ActionType.HINT_COLOUR,hintee,col,c.getColour());
         }
         else{//give value hint
@@ -338,6 +705,104 @@ public class TrainerAgent implements Agent{
             if (hand[k] == null) continue;
             val[k]=c.getValue() == (hand[k]==null?-1:hand[k].getValue());
           }
+          
+        //training label
+          switch(c.getValue()) {
+  	 	case 1: switch(hintee) {
+				    	 	case 0: 
+				    	 		labels.add(36);
+				    	 		break;
+				    	 	case 1:
+				    	 		labels.add(37);
+				    	 		break;
+				    	 	case 2:
+				    	 		labels.add(38);
+				    	 		break;
+				    	 	case 3:
+				    	 		labels.add(39);
+				    	 		break;
+				    	 	case 4:
+				    	 		labels.add(40);
+				    	 		break;
+  	 				}
+ 						 break; 
+		 	case 2: switch(hintee) {
+				    	 	case 0: 
+				    	 		labels.add(41);
+				    	 		break;
+				    	 	case 1:
+				    	 		labels.add(42);
+				    	 		break;
+				    	 	case 2:
+				    	 		labels.add(43);
+				    	 		break;
+				    	 	case 3:
+				    	 		labels.add(44);
+				    	 		break;
+				    	 	case 4:
+				    	 		labels.add(45);
+				    	 		break;
+							}
+						 break; 
+		 	case 3:  switch(hintee) {
+				    	 	case 0: 
+				    	 		labels.add(46);
+				    	 		break;
+				    	 	case 1:
+				    	 		labels.add(47);
+				    	 		break;
+				    	 	case 2:
+				    	 		labels.add(48);
+				    	 		break;
+				    	 	case 3:
+				    	 		labels.add(49);
+				    	 		break;
+				    	 	case 4:
+				    	 		labels.add(50);
+				    	 		break;
+							}
+						 break; 
+		 	case 4:  switch(hintee) {
+				    	 	case 0: 
+				    	 		labels.add(51);
+				    	 		break;
+				    	 	case 1:
+				    	 		labels.add(52);
+				    	 		break;
+				    	 	case 2:
+				    	 		labels.add(53);
+				    	 		break;
+				    	 	case 3:
+				    	 		labels.add(54);
+				    	 		break;
+				    	 	case 4:
+				    	 		labels.add(55);
+				    	 		break;
+							}
+						 break; 
+		 	case 5:  switch(hintee) {
+					    	 	case 0: 
+					    	 		labels.add(56);
+					    	 		break;
+					    	 	case 1:
+					    	 		labels.add(57);
+					    	 		break;
+					    	 	case 2:
+					    	 		labels.add(58);
+					    	 		break;
+					    	 	case 3:
+					    	 		labels.add(59);
+					    	 		break;
+					    	 	case 4:
+					    	 		labels.add(50);
+					    	 		break;
+								}
+						 break; 
+		 	default: System.out.println("invalid");
+						 break; 
+		 }
+          labelsToString=labels.toString();
+          
           return new Action(index,toString(),ActionType.HINT_VALUE,hintee,val,c.getValue());
         }
 

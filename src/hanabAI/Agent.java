@@ -12,6 +12,7 @@ public interface Agent{
   
   //something for Trainer
   public String getFeatures();
+  public String getLabels();
 
   /**
    * Given the state, return the action that the strategy chooses for this state.
