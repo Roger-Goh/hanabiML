@@ -84,33 +84,41 @@ public class Hanabi{
 //    Agent[] agents = {new agents.BasicAgent(),new agents.BasicAgent(), new agents.BasicAgent()};
 //    Agent[] agents = {new agents.BasicAgent(),new agents.TrainerAgent(), new agents.BasicAgent()};
 //	  Agent[] agents = {new agents.BasicAgent(),new agents.BasicAgent()};
+	  Agent[] agents = {new agents.BasicAgent(),new agents.Agent21618306(), new agents.BasicAgent()};
     
-//    Hanabi game= new Hanabi(agents);
-//    StringBuffer log = new StringBuffer("A simple game for three basic agents:\n");
+    Hanabi game= new Hanabi(agents);
+    StringBuffer log = new StringBuffer("A simple game for three basic agents:\n");
 //    int result = game.play();
-////    int result = game.play(log);
-//    log.append("The final score is "+result+".\n");
-//    log.append(critique(result));
-//    System.out.println(log);
+    int result = game.play(log);
+    log.append("The final score is "+result+".\n");
+    log.append(critique(result));
+    System.out.println(log);
 //    System.out.println(agents[1].getFeatures());
     
     
-//      ArrayList<Integer> values = new ArrayList<Integer>();
-	  String features = "";
-	  String labels = "";
-      for(int i=0; i<3; i++) {
-    	  Agent[] agents = {new agents.BasicAgent(),new agents.TrainerAgent(), new agents.BasicAgent()};
-    	  Hanabi game= new Hanabi(agents);
-    	  int result = game.play();
-    	  if(result>-1) { //only gets training data that is better than 15
-//	    	  System.out.println("Score: "+result);
-//	    	  System.out.println(agents[1].getFeatures());
-	    	  features+=agents[1].getFeatures();
-	    	  labels+=agents[1].getLabels().substring(1,agents[1].getLabels().length()-1)+", ";
-    	  }
-      }
-	  System.out.println(features.substring(0, features.length()-1));
-	  System.out.print(labels.substring(0, labels.length()-2));
+////      ArrayList<Integer> values = new ArrayList<Integer>();
+//	  String features = "";
+//	  String labels = "";
+//	  int gameCounter = 0;
+//      for(int i=0; i<10; i++) {
+////	  while(gameCounter<1) {
+//    	  Agent[] agents = {new agents.BasicAgent(),new agents.TrainerAgent(), new agents.BasicAgent()};
+//    	  Hanabi game= new Hanabi(agents);
+//    	  int result = game.play();
+//    	  if(result>-1) { //only gets training data that is better than 15
+////	    	  System.out.println("Score: "+result);
+////	    	  System.out.println(agents[1].getFeatures());
+//	    	  features+=agents[1].getFeatures();
+//	    	  labels+=agents[1].getLabels().substring(1,agents[1].getLabels().length()-1)+", ";
+//	    	  gameCounter++;
+//    	  }
+//      }
+      //print data for training data using TrainerAgent()
+//	  if(features!=""&&labels!="") { //avoid StringIndexOutOfBoundsException
+//		  System.out.println(features.substring(0, features.length()-1));
+//		  System.out.println(labels.substring(0, labels.length()-2));
+//		  System.out.println("Number of games of Score above 16: "+gameCounter);
+//	  }
   }
 }
 
